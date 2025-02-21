@@ -25,6 +25,12 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
+          
+      - name: Debug Python & venv
+        run: |
+          which python
+          which pytest
+          python -m pytest --version
 
       - name: Run Tests
         run: |
