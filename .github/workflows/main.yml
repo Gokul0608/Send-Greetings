@@ -65,24 +65,24 @@ jobs:
         if: success()
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.yourmail.com
-          server_port: 587
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: "✅ FastAPI CI/CD Success - app.goku-backend.com"
-          to: "your-email@example.com"
-          from: "GitHub Actions <your-email@example.com>"
-          body: "The deployment of FastAPI backend was successful. \n\nApplication URL: http://app.goku-backend.com:8000"
+          to: "gokulraja681@yopmail.com"
+          from: "GitHub Actions <${{ secrets.EMAIL_USERNAME }}>"
+          body: "The deployment of FastAPI backend was successful. \n\nApplication URL: http://3.108.254.29:8000"
 
       - name: Send Email on Failure
         if: failure()
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.yourmail.com
-          server_port: 587
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: "❌ FastAPI CI/CD Failed - app.goku-backend.com"
-          to: "your-email@example.com"
-          from: "GitHub Actions <your-email@example.com>"
+          to: "gokulraja681@yopmail.com"
+          from: "GitHub Actions <${{ secrets.EMAIL_USERNAME }}>"
           body: "The deployment of FastAPI backend has failed. Please check the logs."
