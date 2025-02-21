@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
-from email_utils import send_greeting_email
-from config import settings
+from app.email_utils import send_greeting_email
+from app.config import settings
 import uvicorn
 
 app = FastAPI()
@@ -16,6 +16,3 @@ def send_email(recipients: list[str]):
         return {"message": "Emails sent successfully!", "recipients": recipients}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-if __name__ == "__main__":
-    uvicorn.run(app=app, host= "0.0.0.0", port= 8080)

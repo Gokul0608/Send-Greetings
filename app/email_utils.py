@@ -1,7 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from config import settings
+from app.config import settings
 
 def send_greeting_email(recipients: list[str]):
     if not settings.SMTP_USERNAME or not settings.SMTP_PASSWORD:
