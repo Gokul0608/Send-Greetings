@@ -34,7 +34,7 @@ jobs:
           
       - name: Check If Application Started Successfully
         run: |
-          curl -f http://127.0.0.1:8000 || (echo "FastAPI did not start!" && exit 1)
+          curl -f http://127.0.0.1:8000/ || (echo "FastAPI did not start!" && exit 1)
 
       - name: Stop Application
         run: |
