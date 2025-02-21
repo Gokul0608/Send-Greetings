@@ -29,7 +29,7 @@ jobs:
       - name: Start FastAPI Application
         run: |
           source venv/bin/activate
-          uvicorn main:app --host 0.0.0.0 --port 8000 & 
+          uvicorn app.main:app --host 0.0.0.0 --port 8000 & 
           sleep 5
           
       - name: Check If Application Started Successfully
