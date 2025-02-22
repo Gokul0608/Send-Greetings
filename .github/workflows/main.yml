@@ -2,9 +2,9 @@ name: FastAPI CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-test:
@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.12"
 
       - name: Install dependencies
         run: |
@@ -59,3 +59,26 @@ jobs:
 
       - name: Stop Application
         run: pkill -f "uvicorn"
+
+  deploy:
+    name: Deploy FastAPI App
+    needs: build-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Set up SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 3.110.56.178 >> ~/.ssh/known_hosts
+
+      - name: Deploy to FastAPI Server
+        run: |
+          ssh -i ~/.ssh/id_rsa ubuntu@3.110.56.178 << 'EOF'
+            cd /opt/Send-Greetings
+            git pull
+            pip install -r requirements.txt
+            sudo systemctl restart fastapi.service
+          EOF
