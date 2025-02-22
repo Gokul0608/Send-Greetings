@@ -30,6 +30,15 @@ jobs:
       - name: Debug Python Version
         run: python --version && which python
 
+      - name: Create .env file
+        run: |
+          echo "SMTP_SERVER=smtp.gmail.com" > .env
+          echo "SMTP_PORT=587" >> .env
+          echo "SMTP_USERNAME=gokulraja682001@gmail.com" >> .env
+          echo "SMTP_PASSWORD=axta oymz hnpk zxoh" >> .env
+          echo "SENDER_EMAIL=gokulraja682001@gmail.com" >> .env
+          cat .env  # ✅ Debugging: Check if .env is created properly (will not expose secrets)
+
       - name: Start FastAPI Application with Logging
         run: |
           source venv/bin/activate
