@@ -9,7 +9,8 @@ app = FastAPI()
 def home():
     msg = {
         "message": "FastAPI Email Sender is Running!",
-        "note": "This version is commited by Gokul Branch user!"
+        "note": "This version is commited by Gokul Branch user!",
+        "time": "7:52 PM" 
     }
     return msg
 
