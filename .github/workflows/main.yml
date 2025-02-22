@@ -25,73 +25,24 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
-          
-      - name: Start FastAPI Application
+          pip list  # ✅ List installed packages
+
+      - name: Debug Python Version
+        run: python --version && which python
+
+      - name: Start FastAPI Application with Logging
         run: |
           source venv/bin/activate
-          uvicorn app.main:app --host 0.0.0.0 --port 8000 & 
+          uvicorn app.main:app --host 0.0.0.0 --port 8000 --log-level debug > fastapi.log 2>&1 &
           sleep 5
-          
+          cat fastapi.log  # ✅ Display logs
+
+      - name: Check Running Processes
+        run: ps aux | grep uvicorn
+
       - name: Check If Application Started Successfully
         run: |
-          curl -f http://127.0.0.1:8000/ || (echo "FastAPI did not start!" && exit 1)
+          curl -v http://127.0.0.1:8000/ || (echo "FastAPI did not start!" && exit 1)
 
       - name: Stop Application
-        run: |
-          pkill -f "uvicorn"  # ✅ Stop the running FastAPI instance
-
-  deploy:
-    name: Deploy FastAPI App
-    needs: build-test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - name: Set up SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 3.108.254.29 >> ~/.ssh/known_hosts
-
-      - name: Deploy to FastAPI Server
-        run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@3.108.254.29 << 'EOF'
-            cd /opt/Send-Greetings
-            git pull
-            pip install -r requirements.txt
-            sudo systemctl restart fastapi.service
-          EOF
-
-  notify:
-    name: Send Notification
-    needs: deploy
-    runs-on: ubuntu-latest
-    if: always()
-
-    steps:
-      - name: Send Email on Success
-        if: success()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{ secrets.SMTP_SERVER }}
-          server_port: ${{ secrets.SMTP_PORT }}
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "✅ FastAPI CI/CD Success - app.goku-backend.com"
-          to: "gokulraja681@yopmail.com"
-          from: "GitHub Actions <${{ secrets.EMAIL_USERNAME }}>"
-          body: "The deployment of FastAPI backend was successful. \n\nApplication URL: http://3.108.254.29:8000"
-
-      - name: Send Email on Failure
-        if: failure()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{ secrets.SMTP_SERVER }}
-          server_port: ${{ secrets.SMTP_PORT }}
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "❌ FastAPI CI/CD Failed - app.goku-backend.com"
-          to: "gokulraja681@yopmail.com"
-          from: "GitHub Actions <${{ secrets.EMAIL_USERNAME }}>"
-          body: "The deployment of FastAPI backend has failed. Please check the logs."
+        run: pkill -f "uvicorn"
