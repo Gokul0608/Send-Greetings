@@ -2,9 +2,13 @@ name: FastAPI CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main  # ✅ Runs when a commit is pushed to main (including merges)
   pull_request:
-    branches: [main]
+    branches:
+      - main
+    types:
+      - closed  # ✅ Runs only when the PR is closed (merged)
 
 jobs:
   build-test:
