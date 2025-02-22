@@ -7,7 +7,11 @@ app = FastAPI()
 
 @app.get("/")
 def home():
-    return {"message": "FastAPI Email Sender is Running!"}
+    msg = {
+        "message": "FastAPI Email Sender is Running!",
+        "note": "This version is commited by Gokul Branch user!"
+    }
+    return msg
 
 @app.post("/send-email/")
 def send_email(recipients: list[str]):
