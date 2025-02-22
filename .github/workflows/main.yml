@@ -83,6 +83,9 @@ jobs:
           ssh -i ~/.ssh/id_rsa ubuntu@3.110.56.178 << 'EOF'
             sudo systemctl stop fastapi.service
             sudo systemctl status fastapi.service
+            sudo -i
+            date
+            pwd
             cd /opt/Send-Greetings
             git pull origin main
             pip install -r requirements.txt
