@@ -23,7 +23,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m venv venv
+          ls -lrt
           source venv/bin/activate
+          ls -lrt
           pip install -r requirements.txt
           pip list  # ✅ List installed packages
 
@@ -38,9 +40,11 @@ jobs:
           echo "SMTP_PASSWORD=axta oymz hnpk zxoh" >> .env
           echo "SENDER_EMAIL=gokulraja682001@gmail.com" >> .env
           cat .env  # ✅ Debugging: Check if .env is created properly (will not expose secrets)
+          ls -lrt
 
       - name: Start FastAPI Application with Logging
         run: |
+          ls -lrt
           source venv/bin/activate
           uvicorn app.main:app --host 0.0.0.0 --port 8000 --log-level debug > fastapi.log 2>&1 &
           sleep 5
