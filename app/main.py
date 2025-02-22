@@ -10,7 +10,7 @@ def home():
     msg = {
         "message": "FastAPI Email Sender is Running!",
         "note": "This version is commited by Gokul Branch user!",
-        "time": "7:52 PM" 
+        "time": "8:09 PM" 
     }
     return msg
 
